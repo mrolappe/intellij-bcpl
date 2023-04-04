@@ -1,4 +1,4 @@
-package com.github.mrolappe.intellijbcpl.listeners
+package me.mrolappe.intellij.bcpl.listeners
 
 import com.intellij.ide.FrameStateListener
 import com.intellij.openapi.diagnostic.thisLogger

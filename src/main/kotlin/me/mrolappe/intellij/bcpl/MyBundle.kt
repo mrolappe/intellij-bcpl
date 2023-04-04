@@ -1,4 +1,4 @@
-package com.github.mrolappe.intellijbcpl
+package me.mrolappe.intellij.bcpl
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

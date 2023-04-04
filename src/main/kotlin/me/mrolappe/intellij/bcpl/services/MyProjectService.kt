@@ -1,9 +1,9 @@
-package com.github.mrolappe.intellijbcpl.services
+package me.mrolappe.intellij.bcpl.services
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
-import com.github.mrolappe.intellijbcpl.MyBundle
+import me.mrolappe.intellij.bcpl.MyBundle
 
 @Service(Service.Level.PROJECT)
 class MyProjectService(project: Project) {

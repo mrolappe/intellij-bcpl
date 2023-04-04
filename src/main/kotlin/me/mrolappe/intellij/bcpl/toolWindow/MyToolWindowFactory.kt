@@ -1,4 +1,4 @@
-package com.github.mrolappe.intellijbcpl.toolWindow
+package me.mrolappe.intellij.bcpl.toolWindow
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
@@ -8,8 +8,8 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import com.github.mrolappe.intellijbcpl.MyBundle
-import com.github.mrolappe.intellijbcpl.services.MyProjectService
+import me.mrolappe.intellij.bcpl.MyBundle
+import me.mrolappe.intellij.bcpl.services.MyProjectService
 import javax.swing.JButton
 
 
