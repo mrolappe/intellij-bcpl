@@ -1,0 +1,171 @@
+{
+    parserClass = "me.mrolappe.intellij.bcpl.lang.parser.BcplParser"
+    extends = "com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix = "Bcpl"
+    psiImplClassSuffix = "Impl"
+    psiPackage = "me.mrolappe.intellij.bcpl.lang.psi"
+    psiImplPackage = "me.mrolappe.intellij.bcpl.lang.psi.impl"
+
+    elementTypeHolderClass = "me.mrolappe.intellij.bcpl.lang.psi.BcplTypes"
+    elementTypeClass = "me.mrolappe.intellij.bcpl.lang.psi.BcplElementType"
+//    tokenTypeClass = "me.mrolappe.intellij.bcpl.lang.psi.impl.BcplPsiImplUtil"
+
+    // TODO case insensitive
+    tokens = [
+        WHITE_SPACE = "regexp:\s+"
+        BLOCK_COMMENT = "regexp:/\*(.|\n)*?\*/"
+        LINE_COMMENT = "regexp://.*"
+        INTEGER_CONSTANT = "regexp:\d+|#[0-7]+|#x[0-9A-F]+"
+        CHARACTER_CONSTANT = "regexp:('[^\'*]')|('\*[BbNnPpSsTt'*]')"
+        STRING_CONSTANT = 'regexp:"[^"]*"'
+
+        ASSIGN = ":="
+        COMMA = ","
+        EQUALS = "="
+        LBRACE = "{"
+        LPAREN = "("
+        LSHIFT = "<<"
+        MINUS = "-"
+        RBRACE = "}"
+        RPAREN = ")"
+        RSHIFT = ">>"
+        SLASH = "/"
+        STAR = "*"
+
+        AND = "AND"
+        BE = "BE"
+        BREAK = "BREAK"
+        CASE = "CASE"
+        DO = "DO"
+        ELSE = "ELSE"
+        ENDCASE = "ENDCASE"
+        FOR = "FOR"
+        GET = "GET"
+        GLOBAL = "GLOBAL"
+        IF = "IF"
+        INTO = "INTO"
+        LET = "LET"
+        MANIFEST = "MANIFEST"
+        REM = "REM"
+        REPEAT = "REPEAT"
+        REPEATWHILE = "REPEATWHILE"
+        RESULTIS = "RESULTIS"
+        RETURN = "RETURN"
+        STATIC = "STATIC"
+        SWITCHON = "SWITCHON"
+        TABLE = "TABLE"
+        TEST = "TEST"
+        THEN = "THEN"
+        TO = "TO"
+        UNLESS = "UNLESS"
+        UNTIL = "UNTIL"
+        VALOF = "VALOF"
+        WHILE = "WHILE"
+
+        IDENTIFIER = "regexp:[A-Za-z][A-Za-z_]*"
+    ]
+}
+
+file ::= declaration_part
+
+declaration_part ::=
+    declaration|get_directive ( [';'] (declaration|get_directive) )*
+
+get_directive ::=
+    GET STRING_CONSTANT
+
+declaration ::=
+    simultaneous_declaration
+    | manifest_declaration
+    | static_declarations
+    | global_declaration
+
+simultaneous_declaration ::=
+    LET definition ( AND definition )*
+
+definition ::=
+    simple_definition
+    | vector_definition
+    | function_definition
+    | routine_definition
+
+simple_definition ::=
+    name_list EQUALS expression_list
+
+name_list ::=
+    name_ ( COMMA name_ )*
+
+// additional _ to prevent collision with PSI method name
+name_ ::= IDENTIFIER
+
+global_declaration ::=
+    GLOBAL '$(' global_list '$)'
+    | GLOBAL '{' global_list '}'
+
+global_list ::=
+    global_item ( [';'] global_item)*
+
+global_item ::=
+    IDENTIFIER [ ':' constant_expression]
+
+manifest_declaration ::=
+    MANIFEST '$(' manifest_list '$)'
+    | MANIFEST '{' manifest_list '}'
+
+manifest_list ::=
+    manifest_item ( [';'] manifest_item)*
+
+manifest_item ::=
+    name_
+    | name_ '=' constant_expression
+
+static_declarations ::=
+    STATIC '$(' static_declaration '$)'
+    | STATIC '{' static_declaration '}'
+
+static_declaration ::=
+    name_
+    | name_ '=' integer_constant_expression
+
+integer_constant_expression ::=
+    INTEGER_CONSTANT
+    | INTEGER_CONSTANT '+' integer_constant_expression
+
+constant_expression ::=
+    constant_element
+    | constant_expression '|' constant_and_expression
+    | constant_and_expression
+
+constant_and_expression ::=
+    constant_and_expression '&' constant_shift_expression
+    | constant_shift_expression
+
+constant_shift_expression ::=
+    constant_shift_expression ( LSHIFT | RSHIFT ) constant_add_expression
+    | constant_add_expression
+
+constant_add_expression ::=
+    constant_add_expression ( PLUS | MINUS ) constant_mult_expression
+    | ( PLUS | MINUS ) constant_mult_expression
+    constant_mult_expression
+
+constant_mult_expression ::=
+    constant_mult_expression ( STAR | SLASH | REM ) constant_element
+    | constant_element
+
+expression ::=
+    TABLE constant_expression ( COMMA constant_expression )*
+    | VALOF command
+    | conditional_expression
+
+expression_list ::=
+    expression ( COMMA expression)
+
+constant_element ::=
+    CHARACTER_CONSTANT
+    | INTEGER_CONSTANT
+    | name_
+    | TRUE
+    | FALSE
+    | '(' constant_expression ')'

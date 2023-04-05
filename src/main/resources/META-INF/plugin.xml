@@ -9,10 +9,18 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
+        <fileType name="BCPL" extensions="b" implementationClass="me.mrolappe.intellij.bcpl.lang.BcplFileType"
+                  fieldName="INSTANCE" language="BCPL"/>
+
+        <lang.parserDefinition language="BCPL" implementationClass="me.mrolappe.intellij.bcpl.lang.BcplParserDefinition" />
+
+        <lang.syntaxHighlighterFactory language="BCPL" implementationClass="me.mrolappe.intellij.bcpl.lang.BcplSyntaxHighlighterFactory" />
+
         <toolWindow factoryClass="me.mrolappe.intellij.bcpl.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="me.mrolappe.intellij.bcpl.listeners.MyFrameStateListener" topic="com.intellij.ide.FrameStateListener"/>
+        <listener class="me.mrolappe.intellij.bcpl.listeners.MyFrameStateListener"
+                  topic="com.intellij.ide.FrameStateListener"/>
     </applicationListeners>
 </idea-plugin>
