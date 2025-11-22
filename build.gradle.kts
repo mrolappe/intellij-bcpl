@@ -1,6 +1,9 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+
+fun properties(key: String) = providers.gradleProperty(key)
 
 plugins {
     id("java") // Java support
@@ -49,6 +52,7 @@ dependencies {
         // Module Dependencies. Uses `platformBundledModules` property from the gradle.properties file for bundled IntelliJ Platform modules.
         bundledModules(providers.gradleProperty("platformBundledModules").map { it.split(',') })
 
+        pluginVerifier()
         testFramework(TestFrameworkType.Platform)
     }
 }
@@ -58,6 +62,12 @@ intellijPlatform {
     pluginConfiguration {
         name = providers.gradleProperty("pluginName")
         version = providers.gradleProperty("pluginVersion")
+
+        vendor {
+            name = "Marco Rolappe"
+            email = "215132+mrolappe@users.noreply.github.com"
+            url = "https://github.com/mrolappe/intellij-bcpl"
+        }
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         description = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
@@ -86,7 +96,8 @@ intellijPlatform {
         }
 
         ideaVersion {
-            sinceBuild = providers.gradleProperty("pluginSinceBuild")
+            sinceBuild = properties("pluginSinceBuild")
+            untilBuild = properties("pluginUntilBuild")
         }
     }
 
@@ -106,7 +117,8 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            recommended()
+            create(IntelliJPlatformType.IntellijIdea, "2024.2")
+            create(IntelliJPlatformType.IntellijIdea, "2024.3.6")
         }
     }
 }
