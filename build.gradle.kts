@@ -117,8 +117,9 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            create(IntelliJPlatformType.IntellijIdea, "2024.2")
-            create(IntelliJPlatformType.IntellijIdea, "2024.3.6")
+            create(IntelliJPlatformType.IntellijIdeaCommunity, "2024.2")
+            create(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3.6")
+            create(IntelliJPlatformType.IntellijIdeaCommunity, "2025.2.4")
         }
     }
 }
